@@ -1,0 +1,47 @@
+# Apache конфигурация для сайта школы кройки и шитья
+
+# Включение перезаписи URL
+RewriteEngine On
+
+# Редирект с www на без www (опционально)
+# RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+# RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# Принудительное использование HTTPS (раскомментируйте при настройке SSL)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Кэширование статических файлов
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Сжатие файлов
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Защита от прямого доступа к файлам
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Настройка кодировки
+AddDefaultCharset UTF-8
+
+# Защита админ-панели (базовая)
+<Directory "admin">
+    AuthType Basic
+    AuthName "Admin Area"
+    # AuthUserFile /path/to/.htpasswd
+    # Require valid-user
+    # Раскомментируйте выше для включения базовой защиты
+</Directory>
